@@ -39,18 +39,18 @@ class NearEarthObject:
         approaches (list): A list of close approaches related to this NEO.
     """
 
-    def __init__(self, designation, name=None, diameter=float('nan'), hazardous=False):
+    def __init__(self, designation="Unknown", name=None, diameter=float('nan'), hazardous=False):
         """Initialize a new NearEarthObject.
 
         Args:
-            designation (str): The primary designation of the NEO.
-            name (str, optional): The IAU name of the NEO.
+            designation (str): The primary designation of the NEO. Defaults to "Unknown".
+            name (str, optional): The IAU name of the NEO, if it's not None.
             diameter (float, optional): The diameter of the NEO in kilometers.
             hazardous (bool, optional): Indicates if the NEO is potentially hazardous.
         """
-        self.designation = str(designation)
-        self.name = str(name)
-        self.diameter = float(diameter)
+        self.designation = designation  # No need to convert to str, assuming input is always appropriate
+        self.name = str(name) if name else None  # Ensure name is None if not provided
+        self.diameter = float(diameter) if diameter is not None else float('nan')
         self.hazardous = bool(hazardous)
         self.approaches = []
 
@@ -59,16 +59,21 @@ class NearEarthObject:
         """Return the full name of this NEO, combining designation and name."""
         return f"{self.designation} ({self.name})" if self.name else self.designation
 
-
     def __str__(self):
         """Return a human-readable string representation of this NEO."""
-        return (f"A NearEarthObject with designation {self.designation}, name {self.name}, "
-                f"diameter {self.diameter:.3f} km, and potentially hazardous: {'Yes' if self.hazardous else 'No'}.")
+        hazardous_text = "Yes" if self.hazardous else "No"
+        name_text = self.name if self.name else "N/A"
+        diameter_text = f"{self.diameter:.3f}" if not math.isnan(self.diameter) else "Unknown"
+        
+        return (f"A NearEarthObject with designation {self.designation}, "
+                f"name {name_text}, diameter {diameter_text} km, "
+                f"and potentially hazardous: {hazardous_text}.")
 
     def __repr__(self):
         """Return a computer-readable string representation of this NEO."""
         return (f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, "
                 f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})")
+
 
 
 

@@ -81,5 +81,5 @@ def load_approaches(cad_json_path):
 
     return close_approaches
 
-#close_approaches = load_approaches('/Users/Joseph/Documents/capstone/cd0010-advanced-python-techniques-project-starter/data/cad.json')
-#print(close_approaches)
+close_approaches = load_approaches('/Users/Joseph/Documents/capstone/cd0010-advanced-python-techniques-project-starter/data/cad.json')
+print(close_approaches)
