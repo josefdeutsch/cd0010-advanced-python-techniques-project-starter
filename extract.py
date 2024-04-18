@@ -19,13 +19,37 @@ from models import NearEarthObject, CloseApproach
 
 
 def load_neos(neo_csv_path):
-    """Read near-Earth object information from a CSV file.
+    """Read and process NEO data from a CSV file.
 
-    :param neo_csv_path: A path to a CSV file containing data about near-Earth objects.
-    :return: A collection of `NearEarthObject`s.
+    This function reads a CSV file containing data about near Earth objects,
+    and creates a list of NearEarthObject instances for each valid record.
+
+    Args:
+        filename (str): The path to the CSV file containing NEO data.
+
+    Returns:
+        list of NearEarthObject: A list of NearEarthObject instances.
     """
-    # TODO: Load NEO data from the given CSV file.
-    return ()
+
+    import csv
+    neos = []
+    with open(neo_csv_path, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            if row['pdes'] and row['name'] and row['pha'] and row['diameter']:
+                neo = NearEarthObject(
+                    designation=row['pdes'],
+                    name=row['name'],
+                    diameter=row['diameter'],
+                    hazardous=row['pha']
+                )
+                neos.append(neo)
+    return neos
+
+    
+neos = load_neos('/Users/Joseph/Documents/capstone/cd0010-advanced-python-techniques-project-starter/data/neos.csv')
+print(neos)  # to see the output
+
 
 
 def load_approaches(cad_json_path):
@@ -35,4 +59,5 @@ def load_approaches(cad_json_path):
     :return: A collection of `CloseApproach`es.
     """
     # TODO: Load close approach data from the given JSON file.
+    
     return ()

@@ -50,10 +50,10 @@ class NearEarthObject:
             diameter (float, optional): The diameter of the NEO in kilometers.
             hazardous (bool, optional): Indicates if the NEO is potentially hazardous.
         """
-        self.designation = designation
-        self.name = name
-        self.diameter = diameter
-        self.hazardous = hazardous
+        self.designation = str(designation)
+        self.name = str(name)
+        self.diameter = float(diameter)
+        self.hazardous = bool(hazardous)
         self.approaches = []
 
     @property
@@ -83,7 +83,7 @@ class CloseApproach:
         neo (NearEarthObject or None): The NEO this approach is associated with.
     """
 
-    def __init__(self, designation, time, distance, velocity, neo=None):
+    def __init__(self, designation=None, time=None, distance=None, velocity=None, neo=None):
         """Initialize a new CloseApproach.
 
         Args:
