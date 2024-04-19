@@ -59,37 +59,66 @@ class NEODatabase:
             print(f"Key: {key}, Value: {value}") 
 
     def get_neo_by_designation(self, designation):
-        """Find and return an NEO by its primary designation.
+      
+       """Retrieve a NEO by its designation.
 
-        If no match is found, return `None` instead.
+        Validates that the designation is a non-empty string and attempts to retrieve
+        the NEO associated with that designation from the dictionary. If the NEO
+        is not found, an error message is printed.
 
-        Each NEO in the data set has a unique primary designation, as a string.
+        Args:
+            designation (str): The designation of the NEO to retrieve.
 
-        The matching is exact - check for spelling and capitalization if no
-        match is found.
-
-        :param designation: The primary designation of the NEO to search for.
-        :return: The `NearEarthObject` with the desired primary designation, or `None`.
+        Returns:
+            dict or None: The NEO details if found, None otherwise.
         """
-        # TODO: Fetch an NEO by its primary designation.
-        return None
+       
+       if not isinstance(designation, str):
+            print("Input error: Designation must be a string.")
+            return None
+       if designation == "":
+            print("Input error: Designation cannot be empty.")
+            return None
+
+       neo = self.neo_dict.get(designation)
+       if neo is not None:
+            return neo
+
+        # If no matching NEO is found, report the error
+       print(f"Search error: NEO with designation '{designation}' not found.")
+       return None
+    
 
     def get_neo_by_name(self, name):
-        """Find and return an NEO by its name.
-
-        If no match is found, return `None` instead.
-
-        Not every NEO in the data set has a name. No NEOs are associated with
-        the empty string nor with the `None` singleton.
-
-        The matching is exact - check for spelling and capitalization if no
-        match is found.
-
-        :param name: The name, as a string, of the NEO to search for.
-        :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        # TODO: Fetch an NEO by its name.
+        Search for a Near Earth Object (NEO) by its name in the dictionary.
+        
+        Args:
+        name (str): The name of the NEO to search for.
+        
+        Returns:
+        object: Returns the NEO object if found, otherwise None.
+        """
+        # Validate input
+        if not isinstance(name, str):
+            print("Input error: Name must be a string.")
+            return None
+        if name == "":
+            print("Input error: Name cannot be empty.")
+            return None
+
+        # Search for the NEO by name
+        for neo in self.neo_dict.values():
+            if neo.name == name:
+                return self.neo_dict[neo.designation]
+
+        # If no matching NEO is found, report the error
+        print(f"Search error: NEO with name '{name}' not found.")
         return None
+    
+    
+
+
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
