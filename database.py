@@ -43,20 +43,20 @@ class NEODatabase:
         self._approaches = approaches
 
         self.neo_dict = {neo.designation: neo for neo in neos}
+        self.default_neo = self._neos[0]
+
         for approach in approaches:
-            neo = self.neo_dict.get(approach.designation)
-            if neo:
-                approach.neo = neo  # Linking NEO to CloseApproach
-                if hasattr(neo, 'approaches'):
-                   neo.approaches.append(approach)
-                else:
-                    neo.approaches = [approach]
+        # Use the default Neo instance if no match is found
+            neo = self.neo_dict.get(approach.designation, self.default_neo)
+            approach.neo = neo  # Linking NEO to CloseApproach
+            if not hasattr(neo, 'approaches'):
+                neo.approaches = []
+            neo.approaches.append(approach)
         
         
         
     def display_data(self):
-         for key, value in self.neo_dict.items():
-            print(f"Key: {key}, Value: {value}") 
+        print(len(self._neos))
 
     def get_neo_by_designation(self, designation):
       
@@ -137,3 +137,4 @@ class NEODatabase:
         # TODO: Generate `CloseApproach` objects that match all of the filters.
         for approach in self._approaches:
             yield approach
+

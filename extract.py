@@ -19,33 +19,26 @@ from models import NearEarthObject, CloseApproach
 
 
 def load_neos(neo_csv_path):
-    """Read and process NEO data from a CSV file.
-
-    This function reads a CSV file containing data about near Earth objects,
-    and creates a list of NearEarthObject instances for each valid record.
-
-    Args:
-        filename (str): The path to the CSV file containing NEO data.
-
-    Returns:
-        list of NearEarthObject: A list of NearEarthObject instances.
-    """
-
     neos = []
+    limit = 4226
     with open(neo_csv_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            if row['pdes'] and row['name'] and row['pha'] and row['diameter']:
+            if row['pdes']:  # Check for primary designation
+                hazardous = parse_hazardous(row.get('pha'))
                 neo = NearEarthObject(
                     designation=row['pdes'],
-                    name=row['name'],
-                    diameter=row['diameter'],
-                    hazardous=row['pha']
+                    name=row.get('name'),
+                    diameter=row.get('diameter'),
+                    hazardous=hazardous
                 )
                 neos.append(neo)
-    return neos
+                if len(neos) >= limit:
+                    break
+                print(f"Added: {neo.designation}, Name: {neo.name}, Diameter: {neo.diameter}, Hazardous: {neo.hazardous}")
 
-    
+    return neos
+   
 #neos = load_neos('/Users/Joseph/Documents/capstone/cd0010-advanced-python-techniques-project-starter/data/neos.csv')
 #print(neos)  # to see the output
 
@@ -66,6 +59,7 @@ def load_approaches(cad_json_path):
     with open(cad_json_path, 'r') as file:
         data = json.load(file)
 
+    print("length of json: "+str(len(data)))
     # Extract data items
     close_approaches = []
     for entry in data['data']:
@@ -80,5 +74,9 @@ def load_approaches(cad_json_path):
 
     return close_approaches
 
-#close_approaches = load_approaches('/Users/Joseph/Documents/capstone/cd0010-advanced-python-techniques-project-starter/data/cad.json')
-#print(close_approaches)
+def parse_hazardous(hazardous_str):
+    if hazardous_str == 'Y':
+        return True
+    elif hazardous_str == 'N':
+        return False
+    return None  # Return None if no clear hazardous info, and let the constructor handle the conversion

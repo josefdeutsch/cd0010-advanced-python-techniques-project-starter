@@ -40,19 +40,15 @@ class NearEarthObject:
     """
 
     def __init__(self, designation="Unknown", name=None, diameter=float('nan'), hazardous=False):
-        """Initialize a new NearEarthObject.
-
-        Args:
-            designation (str): The primary designation of the NEO. Defaults to "Unknown".
-            name (str, optional): The IAU name of the NEO, if it's not None.
-            diameter (float, optional): The diameter of the NEO in kilometers.
-            hazardous (bool, optional): Indicates if the NEO is potentially hazardous.
-        """
-        self.designation = designation  # No need to convert to str, assuming input is always appropriate
-        self.name = str(name) if name else None  # Ensure name is None if not provided
-        self.diameter = float(diameter) if diameter is not None else float('nan')
-        self.hazardous = bool(hazardous)
+        self.designation = designation
+        self.name = str(name) if name else None
+        try:
+            self.diameter = float(diameter) if float(diameter) > 0 else float('nan')
+        except (ValueError, TypeError):
+            self.diameter = float('nan')
+        self.hazardous = hazardous == 'Y' if isinstance(hazardous, str) else bool(hazardous)
         self.approaches = []
+
 
     @property
     def fullname(self):

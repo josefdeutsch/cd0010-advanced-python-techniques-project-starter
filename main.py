@@ -384,20 +384,6 @@ def main():
     # Extract data from the data files into structured Python objects.
     database = NEODatabase(load_neos(args.neofile), load_approaches(args.cadfile))
     
-    try:
-        neo = database.get_neo_by_designation(1234)
-        print(neo)
-        print(type(neo))
-        print(neo.name)
-        if neo:
-            print(f"Found NEO: {neo.name}, Designation: {neo.designation}, Diameter: {neo.diameter} km, Hazardous: {neo.hazardous}")
-        else:
-            print("No NEO found with that name.")
-    except Exception as e:
-            print(f"An error occurred: {e}")
-
-    # Testing the function with different inputs
-    
     #  Run the chosen subcommand.
     if args.cmd == 'inspect':
         inspect(database, pdes=args.pdes, name=args.name, verbose=args.verbose)
