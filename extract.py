@@ -20,7 +20,6 @@ from models import NearEarthObject, CloseApproach
 
 def load_neos(neo_csv_path):
     neos = []
-    limit = 4226
     with open(neo_csv_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -33,10 +32,6 @@ def load_neos(neo_csv_path):
                     hazardous=hazardous
                 )
                 neos.append(neo)
-                if len(neos) >= limit:
-                    break
-                print(f"Added: {neo.designation}, Name: {neo.name}, Diameter: {neo.diameter}, Hazardous: {neo.hazardous}")
-
     return neos
    
 #neos = load_neos('/Users/Joseph/Documents/capstone/cd0010-advanced-python-techniques-project-starter/data/neos.csv')

@@ -117,4 +117,3 @@ class CloseApproach:
         time_repr = datetime_to_str(self.time) if self.time else "None"
         return (f"CloseApproach(designation={self.designation!r}, time={time_repr!r}, "
                 f"distance={self.distance:.2f}, velocity={self.velocity:.2f}, neo={self.neo!r})")
-
