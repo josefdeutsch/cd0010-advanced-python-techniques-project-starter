@@ -16,15 +16,35 @@ import csv
 import json
 
 from models import NearEarthObject, CloseApproach
+from helpers import Helper
+from typing import List
 
+def load_neos(neo_csv_path=str) -> List[NearEarthObject]: 
 
-def load_neos(neo_csv_path):
+    """
+    Load a list of NearEarthObject instances from a CSV file.
+
+    This function opens a CSV file specified by the path `neo_csv_path`,
+    reads its content, and populates a list with NearEarthObject instances
+    based on the data found in the file. It specifically checks for a
+    primary designation ('pdes') for each NEO in the file and constructs
+    a NearEarthObject instance only if the designation exists.
+
+    Args:
+        neo_csv_path (str): The path to the CSV file containing NEO data.
+
+    Returns:
+        List[NearEarthObject]: A list of NearEarthObject instances
+        constructed from the data in the CSV file.
+
+    """
+
     neos = []
     with open(neo_csv_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             if row['pdes']:  # Check for primary designation
-                hazardous = parse_hazardous(row.get('pha'))
+                hazardous = Helper.parse_hazardous(row.get('pha'))
                 neo = NearEarthObject(
                     designation=row['pdes'],
                     name=row.get('name'),
@@ -34,27 +54,31 @@ def load_neos(neo_csv_path):
                 neos.append(neo)
     return neos
    
-#neos = load_neos('/Users/Joseph/Documents/capstone/cd0010-advanced-python-techniques-project-starter/data/neos.csv')
-#print(neos)  # to see the output
-
-
-
-def load_approaches(cad_json_path):
+def load_approaches(cad_json_path: str) -> List[CloseApproach]:
     
     """
-    Load and process JSON data into a list of CloseApproach objects.
+    Load a list of CloseApproach instances from a JSON file.
+
+    This function opens a JSON file specified by the path `cad_json_path`,
+    reads its contents, and populates a list with CloseApproach instances
+    based on the data found in the file. The function extracts necessary
+    details like designation, time of close approach, distance, and relative
+    velocity from each entry in the JSON file to construct CloseApproach
+    instances.
 
     Args:
-    filepath (str): The path to the JSON file containing close approach data.
+        cad_json_path (str): The path to the JSON file containing close
+        approach data of NEOs.
 
     Returns:
-    list: A list of CloseApproach objects initialized with data from the file.
+        List[CloseApproach]: A list of CloseApproach instances constructed
+        from the data in the JSON file.
+
     """
 
     with open(cad_json_path, 'r') as file:
         data = json.load(file)
 
-    print("length of json: "+str(len(data)))
     # Extract data items
     close_approaches = []
     for entry in data['data']:
@@ -69,9 +93,3 @@ def load_approaches(cad_json_path):
 
     return close_approaches
 
-def parse_hazardous(hazardous_str):
-    if hazardous_str == 'Y':
-        return True
-    elif hazardous_str == 'N':
-        return False
-    return None  # Return None if no clear hazardous info, and let the constructor handle the conversion

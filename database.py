@@ -11,7 +11,7 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 
 You'll edit this file in Tasks 2 and 3.
 """
-
+from helpers import Helper
 
 class NEODatabase:
     """A database of near-Earth objects and their close approaches.
@@ -22,42 +22,35 @@ class NEODatabase:
     querying for close approaches that match criteria.
     """
     def __init__(self, neos, approaches):
-        """Create a new `NEODatabase`.
 
-        As a precondition, this constructor assumes that the collections of NEOs
-        and close approaches haven't yet been linked - that is, the
-        `.approaches` attribute of each `NearEarthObject` resolves to an empty
-        collection, and the `.neo` attribute of each `CloseApproach` is None.
-
-        However, each `CloseApproach` has an attribute (`._designation`) that
-        matches the `.designation` attribute of the corresponding NEO. This
-        constructor modifies the supplied NEOs and close approaches to link them
-        together - after it's done, the `.approaches` attribute of each NEO has
-        a collection of that NEO's close approaches, and the `.neo` attribute of
-        each close approach references the appropriate NEO.
-
-        :param neos: A collection of `NearEarthObject`s.
-        :param approaches: A collection of `CloseApproach`es.
         """
+        Initialize and link NEOs and their close approaches.
+
+        This method initializes NEO and approach attributes of the class.
+        It also creates a dictionary mapping each NEO's designation to the NEO instance.
+        The method links each close approach with a corresponding NEO instance.
+        If a matching NEO is not found, it assigns the first NEO in the list as a default.
+        Additionally, it ensures that each NEO has an 'approaches' attribute and appends
+        each close approach to this list.
+
+        Args:
+            neos (list): A list of NearEarthObject instances.
+            approaches (list): A list of CloseApproach instances.
+        """
+
         self._neos = neos
         self._approaches = approaches
 
         self.neo_dict = {neo.designation: neo for neo in neos}
         self.default_neo = self._neos[0]
-
         for approach in approaches:
         # Use the default Neo instance if no match is found
-            neo = self.neo_dict.get(approach.designation, self.default_neo)
+            neo = self.neo_dict.get(approach.designation)
             approach.neo = neo  # Linking NEO to CloseApproach
             if not hasattr(neo, 'approaches'):
                 neo.approaches = []
             neo.approaches.append(approach)
         
-        
-        
-    def display_data(self):
-        print(len(self._neos))
-
     def get_neo_by_designation(self, designation):
       
        """Retrieve a NEO by its designation.
@@ -72,13 +65,8 @@ class NEODatabase:
         Returns:
             dict or None: The NEO details if found, None otherwise.
         """
-       
-       if not isinstance(designation, str):
-            print("Input error: Designation must be a string.")
-            return None
-       if designation == "":
-            print("Input error: Designation cannot be empty.")
-            return None
+       if (designation := Helper.validate_input(designation)) is None:
+          return None
 
        neo = self.neo_dict.get(designation)
        if neo is not None:
@@ -88,7 +76,6 @@ class NEODatabase:
        print(f"Search error: NEO with designation '{designation}' not found.")
        return None
     
-
     def get_neo_by_name(self, name):
         """
         Search for a Near Earth Object (NEO) by its name in the dictionary.
@@ -99,14 +86,9 @@ class NEODatabase:
         Returns:
         object: Returns the NEO object if found, otherwise None.
         """
-        # Validate input
-        if not isinstance(name, str):
-            print("Input error: Name must be a string.")
-            return None
-        if name == "":
-            print("Input error: Name cannot be empty.")
-            return None
-
+        if (name := Helper.validate_input(name)) is None:
+         return None
+       
         # Search for the NEO by name
         for neo in self.neo_dict.values():
             if neo.name == name:

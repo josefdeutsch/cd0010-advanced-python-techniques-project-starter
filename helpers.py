@@ -42,3 +42,53 @@ def datetime_to_str(dt):
     :return: That datetime, as a human-readable string without seconds.
     """
     return datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M")
+
+
+def parse_hazardous(hazardous_str):
+        """
+        Converts a string indicating hazardous status to a Boolean.
+
+        Args:
+            hazardous_str (str): A string that can be 'Y' for hazardous, 'N' for non-hazardous, or None.
+
+        Returns:
+            bool | None: True if hazardous, False if not hazardous, or None if information is unclear.
+        """
+        if hazardous_str == 'Y':
+            return True
+        elif hazardous_str == 'N':
+            return False
+        return None  # Return None if no clear hazardous info
+
+class Helper:
+
+    @staticmethod
+    def parse_hazardous(hazardous_str):
+        """
+        Converts a string indicating hazardous status to a Boolean.
+
+        Args:
+            hazardous_str (str): A string that can be 'Y' for hazardous, 'N' for non-hazardous, or None.
+
+        Returns:
+            bool | None: True if hazardous, False if not hazardous, or None if information is unclear.
+        """
+        if hazardous_str == 'Y':
+            return True
+        elif hazardous_str == 'N':
+            return False
+        return None  # Return None if no clear hazardous info
+
+    @staticmethod
+    def validate_input(value):
+
+            if not isinstance(value, str):
+                print("Input error: Name must be a string.")
+                return None
+            if value == "":
+                print("Input error: Name cannot be empty.")
+                return None
+           
+            return value
+
+    

@@ -40,13 +40,28 @@ class NearEarthObject:
     """
 
     def __init__(self, designation="Unknown", name=None, diameter=float('nan'), hazardous=False):
+        
+        """
+        Initializes a new NearEarthObject instance with the given properties.
+
+        Parameters:
+            designation (str): The designation of the NEO. Defaults to "Unknown".
+            name (str, optional): The name of the NEO. Defaults to None.
+            diameter (float): The diameter of the NEO. Non-numeric values default to NaN.
+            hazardous (bool): Indicates if the NEO is potentially hazardous. Defaults to False.
+
+        Raises:
+            ValueError: If the provided diameter cannot be converted to a float and is not a numeric value.
+            TypeError: If the input types are incorrect for the designated parameters.
+        """
+
         self.designation = designation
-        self.name = str(name) if name else None
+        self.name = str(name) if name else None  
         try:
             self.diameter = float(diameter) if float(diameter) > 0 else float('nan')
         except (ValueError, TypeError):
             self.diameter = float('nan')
-        self.hazardous = hazardous == 'Y' if isinstance(hazardous, str) else bool(hazardous)
+        self.hazardous = bool(hazardous)
         self.approaches = []
 
 
