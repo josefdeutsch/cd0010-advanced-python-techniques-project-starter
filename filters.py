@@ -159,6 +159,16 @@ def create_filters(date=None, start_date=None, end_date=None,
 
 
 def limit(iterator, n=None):
+    """
+    Yield items from an iterator up to a maximum number of items.
+
+    Parameters:
+        iterator: An iterable object.
+        n (int, optional): The maximum number of items to yield. If None or <= 0, all items are yielded.
+
+    Yields:
+        The next item from the iterator until the maximum number of items is reached.
+    """
     if n is None or n <= 0:
         yield from iterator
     else:
