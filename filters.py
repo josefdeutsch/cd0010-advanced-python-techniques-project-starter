@@ -159,13 +159,10 @@ def create_filters(date=None, start_date=None, end_date=None,
 
 
 def limit(iterator, n=None):
-    """Produce a limited stream of values from an iterator.
-
-    If `n` is 0 or None, don't limit the iterator at all.
-
-    :param iterator: An iterator of values.
-    :param n: The maximum number of values to produce.
-    :yield: The first (at most) `n` values from the iterator.
-    """
-    # TODO: Produce at most `n` values from the given iterator.
-    return iterator
+    if n is None or n <= 0:
+        yield from iterator
+    else:
+        for i, item in enumerate(iterator):
+            if i >= n:
+                break
+            yield item
