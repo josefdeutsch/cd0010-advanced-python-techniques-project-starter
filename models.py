@@ -86,7 +86,14 @@ class NearEarthObject:
                 f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})")
 
 
-
+    def serialize(self):
+        """Serialize this NearEarthObject into a dictionary suitable for JSON serialization."""
+        return {
+            'designation': self.designation,
+            'name': self.name if self.name else "",  # Default to an empty string if name is None
+            'diameter_km': self.diameter if not math.isnan(self.diameter) else float('nan'),  # Preserve NaN for JSON
+            'potentially_hazardous': self.hazardous
+        }
 
 class CloseApproach:
     """Represent a close approach to Earth by an NEO.
@@ -132,3 +139,11 @@ class CloseApproach:
         time_repr = datetime_to_str(self.time) if self.time else "None"
         return (f"CloseApproach(designation={self.designation!r}, time={time_repr!r}, "
                 f"distance={self.distance:.2f}, velocity={self.velocity:.2f}, neo={self.neo!r})")
+    
+    def serialize(self):
+        """Serialize this CloseApproach into a dictionary suitable for JSON serialization."""
+        return {
+            'datetime_utc': datetime_to_str(self.time),
+            'distance_au': self.distance,
+            'velocity_km_s': self.velocity
+        }
